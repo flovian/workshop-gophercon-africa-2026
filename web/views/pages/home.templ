@@ -47,7 +47,7 @@ templ Home(sightings []sighting.Sighting) {
 			} else {
 				<ul class="wall" id="sightings-list">
 					for _, s := range sightings {
-						<li id={ "sighting-" + s.ID.String() }>
+						<li>
 							@components.SightingCard(s)
 						</li>
 					}

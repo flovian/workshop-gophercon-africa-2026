@@ -11,34 +11,95 @@ import (
 )
 
 templ SightingCard(s sighting.Sighting) {
-	<article class="card">
-		<!-- Header -->
-		<header class="card__header">
-			<h2>{ displayName(s.Species) }</h2>
-			if s.Species.ScientificName != "" {
-				<p class="card__scientific">{ s.Species.ScientificName }</p>
-			}
-		</header>
-		<!-- Meta -->
-		<dl class="card__meta">
-			<dt>Seen</dt>
-			<dd>{ s.HappenedAt.Format("2 January 2006") }</dd>
-			<dt>Where</dt>
-			<dd>{ place(s.Location) }</dd>
-			if s.IndividualCount != nil {
-				<dt>Count</dt>
-				<dd>{ individuals(*s.IndividualCount) }</dd>
-			}
-			if s.RecordedBy != "" {
-				<dt>Recorded by</dt>
-				<dd>{ s.RecordedBy }</dd>
-			}
-		</dl>
-		<!-- Gallery -->
-		<div class="card__gallery">
-			@Gallery(s.Media)
+	<article class="card" id={ Anchor(s) }>
+		<div class={ "card__media", templ.KV("card__media--empty", !hasCover(s.Media)) }>
+			@Cover(s.Media)
+			<span class="card__badge">{ place(s.Location) }</span>
+		</div>
+		if thumbs := strip(s.Media); len(thumbs) > 0 {
+			<ul class="card__strip">
+				for _, m := range thumbs {
+					<li>
+						<img src={ m.URL } alt={ altText(m) } loading="lazy" width="96" height="72"/>
+					</li>
+				}
+			</ul>
+		}
+		<div class="card__body">
+			<header class="card__header">
+				<h2>{ displayName(s.Species) }</h2>
+				if s.Species.ScientificName != "" {
+					<p class="card__scientific">{ s.Species.ScientificName }</p>
+				}
+			</header>
+			<dl class="card__meta">
+				<dt>Seen</dt>
+				<dd>{ s.HappenedAt.Format("2 January 2006") }</dd>
+				<dt>Where</dt>
+				<dd>{ place(s.Location) }</dd>
+				if s.IndividualCount != nil {
+					<dt>Count</dt>
+					<dd>{ individuals(*s.IndividualCount) }</dd>
+				}
+				if s.RecordedBy != "" {
+					<dt>Observed by</dt>
+					<dd>{ s.RecordedBy }</dd>
+				}
+			</dl>
+			<div class="card__weather">
+				@Weather(s.Weather)
+			</div>
 		</div>
 	</article>
+}
+
+// Anchor is the element id a map popup jumps to.
+func Anchor(s sighting.Sighting) string {
+	return "sighting-" + s.ID.String()
+}
+
+// hasCover reports whether there is a photograph to lead with.
+func hasCover(media []sighting.Media) bool {
+	return len(imageOnly(media)) > 0
+}
+
+// Cover draws the lead photograph, or the empty state when GBIF sent none.
+templ Cover(media []sighting.Media) {
+	{{ images := imageOnly(media) }}
+	if len(images) == 0 {
+		<p class="card__cover-empty">No photograph on record</p>
+	} else {
+		<img src={ images[0].URL } alt={ altText(images[0]) } loading="lazy" width="800" height="600"/>
+	}
+}
+
+// altText is what the photograph shows, as GBIF recorded it.
+func altText(m sighting.Media) string {
+	return cmp.Or(m.Title, m.Description, "Sighting media")
+}
+
+// strip is the photographs after the lead one, at most three of them.
+func strip(media []sighting.Media) []sighting.Media {
+	images := imageOnly(media)
+	if len(images) < 2 {
+		return nil
+	}
+	return images[1:min(4, len(images))]
+}
+
+// imageOnly keeps the still photographs, since video and audio have no
+// frame to show in a tile.
+func imageOnly(media []sighting.Media) []sighting.Media {
+	images := slices.DeleteFunc(slices.Clone(media), func(m sighting.Media) bool {
+		return m.Type != "StillImage" || m.URL == ""
+	})
+	slices.SortFunc(images, func(a, b sighting.Media) int {
+		return cmp.Or(
+			b.Created.Compare(a.Created),
+			cmp.Compare(a.URL, b.URL),
+		)
+	})
+	return images
 }
 
 // displayName prefers the name a reader would recognise, falling back
