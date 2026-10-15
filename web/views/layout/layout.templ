@@ -79,16 +79,25 @@ templ Base(props BaseProps) {
 					</span>
 				</a>
 				<nav class="site-nav" aria-label="Sections">
-					<a href="/#stats" if props.Current == "stats" {
-						aria-current="page"
-					}>Numbers</a>
+					<a
+						href="/#stats"
+						if props.Current == "stats" {
+							aria-current="page"
+						}
+					>Numbers</a>
 					<a href="/#notes">Notes</a>
-					<a href="/#sightings" if props.Current == "sightings" {
-						aria-current="page"
-					}>Sightings</a>
-					<a href="/#map" if props.Current == "map" {
-						aria-current="page"
-					}>Map</a>
+					<a
+						href="/#sightings"
+						if props.Current == "sightings" {
+							aria-current="page"
+						}
+					>Sightings</a>
+					<a
+						href="/#map"
+						if props.Current == "map" {
+							aria-current="page"
+						}
+					>Map</a>
 					<a href="/#tracks">Tracks</a>
 				</nav>
 			</header>
