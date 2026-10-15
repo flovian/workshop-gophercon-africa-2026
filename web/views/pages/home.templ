@@ -16,6 +16,13 @@ templ Home(sightings []sighting.Sighting) {
 	}) {
 		<section class="hero">
 			<div class="hero__glow"></div>
+			<div class="hero__scene">
+				@components.ThreeScene(components.ThreeSceneProps{
+					Scene:    "globe",
+					Backdrop: true,
+				})
+				@templ.JSONScript("globe-points", components.GlobePoints(sightings))
+			</div>
 			<div class="hero__inner">
 				<p class="hero__eyebrow">GopherCon Africa · Nairobi</p>
 				<h1>Wildlife, <em>after dark</em></h1>
