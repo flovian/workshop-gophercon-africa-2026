@@ -3,6 +3,7 @@ package components
 import (
 	"cmp"
 	"fmt"
+	"math"
 	"slices"
 	"strings"
 
@@ -49,6 +50,17 @@ templ SightingCard(s sighting.Sighting) {
 			<div class="card__weather">
 				@Weather(s.Weather)
 			</div>
+			<footer class="card__source">
+				<span class="card__coords" title="Recorded position, to three decimal places">
+					{ coords(s.Location.Coordinates) }
+				</span>
+				if b := basis(s.BasisOfRecord); b != "" {
+					<span class="card__basis">{ b }</span>
+				}
+				if s.ReferenceURL != "" {
+					<a href={ templ.URL(s.ReferenceURL) } target="_blank" rel="noopener noreferrer">Source record</a>
+				}
+			</footer>
 		</div>
 	</article>
 }
@@ -70,6 +82,9 @@ templ Cover(media []sighting.Media) {
 		<p class="card__cover-empty">No photograph on record</p>
 	} else {
 		<img src={ images[0].URL } alt={ altText(images[0]) } loading="lazy" width="800" height="600"/>
+		if c := credit(images[0]); c != "" {
+			<span class="card__credit">{ c }</span>
+		}
 	}
 }
 
@@ -123,4 +138,77 @@ func individuals(n int) string {
 		return "1 individual"
 	}
 	return fmt.Sprintf("%d individuals", n)
+}
+
+// coords writes the recorded position the way a field note would: signed
+// hemisphere rather than a minus sign, so it reads at a glance.
+func coords(c sighting.Coordinates) string {
+	ns, ew := "N", "E"
+	if c.Latitude < 0 {
+		ns = "S"
+	}
+	if c.Longitude < 0 {
+		ew = "W"
+	}
+	return fmt.Sprintf("%.3f° %s, %.3f° %s", math.Abs(c.Latitude), ns, math.Abs(c.Longitude), ew)
+}
+
+// basis says in words how the record came to exist, which is the difference
+// between a person who was there and a sensor someone left running.
+func basis(b string) string {
+	switch b {
+	case "HUMAN_OBSERVATION":
+		return "Seen by a person"
+	case "MACHINE_OBSERVATION":
+		return "Recorded by a sensor"
+	case "PRESERVED_SPECIMEN":
+		return "Preserved specimen"
+	case "MATERIAL_SAMPLE":
+		return "Material sample"
+	case "OCCURRENCE":
+		return "Occurrence"
+	case "":
+		return ""
+	default:
+		return strings.ToLower(strings.ReplaceAll(b, "_", " "))
+	}
+}
+
+// credit names the photographer and, in short form, the licence GBIF carried,
+// so every picture on the wall can be traced back to its owner.
+func credit(m sighting.Media) string {
+	return strings.Join(compact([]string{m.Creator, licence(m.License)}), " · ")
+}
+
+// licence shortens the common Creative Commons URLs; anything else is left
+// as it came.
+func licence(u string) string {
+	switch {
+	case u == "":
+		return ""
+	case strings.Contains(u, "publicdomain/zero"):
+		return "CC0"
+	case strings.Contains(u, "publicdomain/mark") || strings.Contains(u, "publicdomain"):
+		return "Public domain"
+	case strings.Contains(u, "licenses/by-nc-nd/"):
+		return "CC BY-NC-ND"
+	case strings.Contains(u, "licenses/by-nc-sa/"):
+		return "CC BY-NC-SA"
+	case strings.Contains(u, "licenses/by-nc/"):
+		return "CC BY-NC"
+	case strings.Contains(u, "licenses/by-nd/"):
+		return "CC BY-ND"
+	case strings.Contains(u, "licenses/by-sa/"):
+		return "CC BY-SA"
+	case strings.Contains(u, "licenses/by/"):
+		return "CC BY"
+	default:
+		return u
+	}
+}
+
+// compact drops the empty strings, so a join of the parts never leaves a
+// dangling separator.
+func compact(parts []string) []string {
+	return slices.DeleteFunc(parts, func(s string) bool { return s == "" })
 }

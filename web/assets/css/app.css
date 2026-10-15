@@ -771,6 +771,57 @@ main {
 	font-size: 0.9rem;
 }
 
+.card__credit {
+	position: absolute;
+	right: 12px;
+	bottom: 12px;
+	z-index: 1;
+	max-width: 70%;
+	overflow: hidden;
+	padding: 0.25rem 0.6rem;
+	border-radius: 999px;
+	background: color-mix(in srgb, var(--ink) 78%, transparent);
+	backdrop-filter: blur(6px);
+	color: var(--sand);
+	font-size: 0.66rem;
+	letter-spacing: 0.03em;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.card__source {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.4rem 0.9rem;
+	margin-top: auto;
+	padding-top: 0.85rem;
+	border-top: 1px solid var(--line);
+	color: var(--sand-dim);
+	font-size: 0.72rem;
+}
+
+.card__coords {
+	font-variant-numeric: tabular-nums;
+	letter-spacing: 0.02em;
+}
+
+.card__basis::before {
+	content: "· ";
+	color: var(--sand-dim);
+}
+
+.card__source a {
+	margin-left: auto;
+	color: var(--gold-soft);
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.card__source a:hover {
+	text-decoration: underline;
+}
+
 .stats__panel h3:not(:first-child) {
 	margin-top: 1.75rem;
 }

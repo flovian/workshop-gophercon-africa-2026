@@ -11,6 +11,7 @@ import templruntime "github.com/a-h/templ/runtime"
 import (
 	"cmp"
 	"fmt"
+	"math"
 	"slices"
 	"strings"
 
@@ -46,7 +47,7 @@ func SightingCard(s sighting.Sighting) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.ResolveAttributeValue(Anchor(s))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 14, Col: 37}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 15, Col: 37}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var2)
 		if templ_7745c5c3_Err != nil {
@@ -89,7 +90,7 @@ func SightingCard(s sighting.Sighting) templ.Component {
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(place(s.Location))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 17, Col: 48}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 18, Col: 48}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
@@ -112,7 +113,7 @@ func SightingCard(s sighting.Sighting) templ.Component {
 				var templ_7745c5c3_Var6 string
 				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.ResolveAttributeValue(m.URL)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 23, Col: 22}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 24, Col: 22}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var6)
 				if templ_7745c5c3_Err != nil {
@@ -125,7 +126,7 @@ func SightingCard(s sighting.Sighting) templ.Component {
 				var templ_7745c5c3_Var7 string
 				templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.ResolveAttributeValue(altText(m))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 23, Col: 41}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 24, Col: 41}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var7)
 				if templ_7745c5c3_Err != nil {
@@ -148,7 +149,7 @@ func SightingCard(s sighting.Sighting) templ.Component {
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(displayName(s.Species))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 30, Col: 32}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 31, Col: 32}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {
@@ -166,7 +167,7 @@ func SightingCard(s sighting.Sighting) templ.Component {
 			var templ_7745c5c3_Var9 string
 			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(s.Species.ScientificName)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 32, Col: 59}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 33, Col: 59}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 			if templ_7745c5c3_Err != nil {
@@ -184,7 +185,7 @@ func SightingCard(s sighting.Sighting) templ.Component {
 		var templ_7745c5c3_Var10 string
 		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(s.HappenedAt.Format("2 January 2006"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 37, Col: 47}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 38, Col: 47}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 		if templ_7745c5c3_Err != nil {
@@ -197,7 +198,7 @@ func SightingCard(s sighting.Sighting) templ.Component {
 		var templ_7745c5c3_Var11 string
 		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(place(s.Location))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 39, Col: 27}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 40, Col: 27}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 		if templ_7745c5c3_Err != nil {
@@ -215,7 +216,7 @@ func SightingCard(s sighting.Sighting) templ.Component {
 			var templ_7745c5c3_Var12 string
 			templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(individuals(*s.IndividualCount))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 42, Col: 42}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 43, Col: 42}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 			if templ_7745c5c3_Err != nil {
@@ -234,7 +235,7 @@ func SightingCard(s sighting.Sighting) templ.Component {
 			var templ_7745c5c3_Var13 string
 			templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(s.RecordedBy)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 46, Col: 23}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 47, Col: 23}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 			if templ_7745c5c3_Err != nil {
@@ -253,7 +254,62 @@ func SightingCard(s sighting.Sighting) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "</div></div></article>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "</div><footer class=\"card__source\"><span class=\"card__coords\" title=\"Recorded position, to three decimal places\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var14 string
+		templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(coords(s.Location.Coordinates))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 55, Col: 37}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, "</span> ")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if b := basis(s.BasisOfRecord); b != "" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "<span class=\"card__basis\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var15 string
+			templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(b)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 58, Col: 34}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "</span> ")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		if s.ReferenceURL != "" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "<a href=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var16 templ.SafeURL
+			templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL(s.ReferenceURL))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 61, Col: 40}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 29, "\" target=\"_blank\" rel=\"noopener noreferrer\">Source record</a>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, "</footer></div></article>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -288,47 +344,66 @@ func Cover(media []sighting.Media) templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var14 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var14 == nil {
-			templ_7745c5c3_Var14 = templ.NopComponent
+		templ_7745c5c3_Var17 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var17 == nil {
+			templ_7745c5c3_Var17 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		images := imageOnly(media)
 		if len(images) == 0 {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, "<p class=\"card__cover-empty\">No photograph on record</p>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "<p class=\"card__cover-empty\">No photograph on record</p>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "<img src=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "<img src=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var15 string
-			templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.ResolveAttributeValue(images[0].URL)
+			var templ_7745c5c3_Var18 string
+			templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.ResolveAttributeValue(images[0].URL)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 72, Col: 26}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 84, Col: 26}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var15)
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var18)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "\" alt=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 33, "\" alt=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var16 string
-			templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.ResolveAttributeValue(altText(images[0]))
+			var templ_7745c5c3_Var19 string
+			templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.ResolveAttributeValue(altText(images[0]))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 72, Col: 53}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 84, Col: 53}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var16)
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var19)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "\" loading=\"lazy\" width=\"800\" height=\"600\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 34, "\" loading=\"lazy\" width=\"800\" height=\"600\"> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
+			}
+			if c := credit(images[0]); c != "" {
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 35, "<span class=\"card__credit\">")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_Var20 string
+				templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinStringErrs(c)
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/components/sighting_card.templ`, Line: 86, Col: 33}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var20))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 36, "</span>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
 			}
 		}
 		return nil
@@ -385,6 +460,79 @@ func individuals(n int) string {
 		return "1 individual"
 	}
 	return fmt.Sprintf("%d individuals", n)
+}
+
+// coords writes the recorded position the way a field note would: signed
+// hemisphere rather than a minus sign, so it reads at a glance.
+func coords(c sighting.Coordinates) string {
+	ns, ew := "N", "E"
+	if c.Latitude < 0 {
+		ns = "S"
+	}
+	if c.Longitude < 0 {
+		ew = "W"
+	}
+	return fmt.Sprintf("%.3f° %s, %.3f° %s", math.Abs(c.Latitude), ns, math.Abs(c.Longitude), ew)
+}
+
+// basis says in words how the record came to exist, which is the difference
+// between a person who was there and a sensor someone left running.
+func basis(b string) string {
+	switch b {
+	case "HUMAN_OBSERVATION":
+		return "Seen by a person"
+	case "MACHINE_OBSERVATION":
+		return "Recorded by a sensor"
+	case "PRESERVED_SPECIMEN":
+		return "Preserved specimen"
+	case "MATERIAL_SAMPLE":
+		return "Material sample"
+	case "OCCURRENCE":
+		return "Occurrence"
+	case "":
+		return ""
+	default:
+		return strings.ToLower(strings.ReplaceAll(b, "_", " "))
+	}
+}
+
+// credit names the photographer and, in short form, the licence GBIF carried,
+// so every picture on the wall can be traced back to its owner.
+func credit(m sighting.Media) string {
+	return strings.Join(compact([]string{m.Creator, licence(m.License)}), " · ")
+}
+
+// licence shortens the common Creative Commons URLs; anything else is left
+// as it came.
+func licence(u string) string {
+	switch {
+	case u == "":
+		return ""
+	case strings.Contains(u, "publicdomain/zero"):
+		return "CC0"
+	case strings.Contains(u, "publicdomain/mark") || strings.Contains(u, "publicdomain"):
+		return "Public domain"
+	case strings.Contains(u, "licenses/by-nc-nd/"):
+		return "CC BY-NC-ND"
+	case strings.Contains(u, "licenses/by-nc-sa/"):
+		return "CC BY-NC-SA"
+	case strings.Contains(u, "licenses/by-nc/"):
+		return "CC BY-NC"
+	case strings.Contains(u, "licenses/by-nd/"):
+		return "CC BY-ND"
+	case strings.Contains(u, "licenses/by-sa/"):
+		return "CC BY-SA"
+	case strings.Contains(u, "licenses/by/"):
+		return "CC BY"
+	default:
+		return u
+	}
+}
+
+// compact drops the empty strings, so a join of the parts never leaves a
+// dangling separator.
+func compact(parts []string) []string {
+	return slices.DeleteFunc(parts, func(s string) bool { return s == "" })
 }
 
 var _ = templruntime.GeneratedTemplate
