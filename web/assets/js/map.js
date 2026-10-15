@@ -4,11 +4,16 @@
 // the JSON the component wrote out. Markers always go on a canvas, since
 // the home page has thousands; clusters and heat are opt-in per map and
 // used only when their plugin loaded. Without Leaflet the fallback shows.
+//
+// Each map also keeps its markers keyed by the card they came from: when the
+// filter fires `filter:change` the markers go with the cards, so the wall and
+// the map always tell the same story, and hovering a marker lights its card.
 
 (function () {
 	const TILES = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 	const CREDIT = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 	const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	const maps = [];
 
 	function points(id) {
 		const el = document.getElementById(id);
@@ -62,6 +67,8 @@
 
 		const latLngs = data.map((p) => [p.lat, p.lng]);
 		let layer;
+		const registry = new Map(); // anchor -> marker
+
 		if ('heat' in el.dataset && typeof L.heatLayer === 'function') {
 			layer = L.heatLayer(latLngs, { radius: 18, blur: 15, minOpacity: 0.3 });
 		} else {
@@ -71,10 +78,18 @@
 				? L.markerClusterGroup({ chunkedLoading: true, showCoverageOnHover: false })
 				: L.featureGroup();
 			data.forEach((p) => {
-				L.circleMarker([p.lat, p.lng], { radius: 6, weight: 2, color: stroke, fillColor: fill, fillOpacity: 0.8 })
+				const marker = L.circleMarker([p.lat, p.lng], { radius: 6, weight: 2, color: stroke, fillColor: fill, fillOpacity: 0.8 })
 					// A function, so the popup is only built when it opens.
-					.bindPopup(() => popup(p))
-					.addTo(layer);
+					.bindPopup(() => popup(p));
+				if (p.anchor) {
+					registry.set(p.anchor, marker);
+					const card = document.getElementById(p.anchor);
+					if (card) {
+						marker.on('mouseover', () => card.classList.add('is-linked'));
+						marker.on('mouseout', () => card.classList.remove('is-linked'));
+					}
+				}
+				marker.addTo(layer);
 			});
 		}
 		layer.addTo(map);
@@ -88,7 +103,22 @@
 		// Wheel zoom waits for a click or focus, so the page scrolls past freely.
 		map.on('focus', () => map.scrollWheelZoom.enable());
 		map.on('blur', () => map.scrollWheelZoom.disable());
+
+		if (registry.size) maps.push({ layer: layer, registry: registry });
 	}
+
+	// One listener for every map on the page: markers whose card was filtered
+	// out leave the map, markers whose card is visible come back.
+	document.addEventListener('filter:change', (event) => {
+		const detail = event.detail || {};
+		const visible = new Set(detail.anchors || []);
+		maps.forEach((entry) => {
+			entry.registry.forEach((marker, anchor) => {
+				if (detail.all || visible.has(anchor)) entry.layer.addLayer(marker);
+				else entry.layer.removeLayer(marker);
+			});
+		});
+	});
 
 	document.querySelectorAll('[data-map]').forEach(init);
 })();

@@ -11,7 +11,8 @@
 
 		// Read every item once: thousands of dataset reads per keystroke drag.
 		const items = Array.from(list.children, function (el) {
-			return { el: el, data: Object.assign({}, el.dataset) };
+			const card = el.querySelector('[id^="sighting-"]');
+			return { el: el, anchor: card ? card.id : '', data: Object.assign({}, el.dataset) };
 		});
 		const search = form.querySelector('input[type="search"]');
 		const count = form.querySelector('.filter__count');
@@ -37,12 +38,24 @@
 			const groups = selected();
 			const query = search ? search.value.trim().toLowerCase() : '';
 			let shown = 0;
+			const anchors = [];
 			items.forEach(function (item) {
 				const show = matches(item.data, groups, query);
 				item.el.hidden = !show;
-				if (show) shown++;
+				if (show) {
+					shown++;
+					if (item.anchor) anchors.push(item.anchor);
+				}
 			});
 			if (count) count.textContent = shown === items.length ? '' : shown + ' of ' + items.length;
+			// The map listens for this and hides the markers that went with the
+			// tiles, so the two always show the same set.
+			form.dispatchEvent(
+				new CustomEvent('filter:change', {
+					bubbles: true,
+					detail: { all: shown === items.length, anchors: anchors },
+				}),
+			);
 		}
 
 		// One pass per frame, however fast they type or tick.
@@ -57,5 +70,7 @@
 			e.preventDefault();
 		});
 		form.hidden = false;
+		// First pass settles the count and tells the map everything is present.
+		apply();
 	});
 })();

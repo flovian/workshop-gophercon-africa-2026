@@ -483,9 +483,14 @@ main {
 	box-shadow: 0 30px 70px -34px rgba(212, 160, 23, 0.55);
 }
 
-.card:target {
+.card:target,
+.card.is-linked {
 	border-color: var(--gold);
 	box-shadow: 0 0 0 2px var(--gold), var(--shadow);
+}
+
+.card.is-linked {
+	transform: translateY(-6px);
 }
 
 .card__media {
