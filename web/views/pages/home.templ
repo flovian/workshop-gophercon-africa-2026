@@ -8,6 +8,7 @@ import (
 
 templ Home(sightings []sighting.Sighting) {
 	{{ sum := sighting.Summarise(sightings) }}
+	{{ byYear := sighting.CountByYear(sightings) }}
 	@layout.Base(layout.BaseProps{
 		Title:       "Sightings",
 		Description: "Animal occurrence records from GBIF, lit up after dark.",
@@ -36,6 +37,51 @@ templ Home(sightings []sighting.Sighting) {
 				}
 			</div>
 		</section>
+		if sum.Sightings > 0 {
+			<section class="section container" id="stats">
+				<div class="section__head reveal">
+					<h2>Numbers</h2>
+					<p>What the archive holds, counted from the records below.</p>
+				</div>
+				<hr class="rule reveal"/>
+				<div class="stats reveal">
+					<div class="stats__figures">
+						<div class="stat">
+							<b>{ count(sum.Sightings) }</b>
+							<span>Sightings</span>
+						</div>
+						<div class="stat">
+							<b>{ count(sum.Species) }</b>
+							<span>Species</span>
+						</div>
+						<div class="stat">
+							<b>{ count(sum.Countries) }</b>
+							<span>Countries</span>
+						</div>
+						<div class="stat">
+							<b>{ count(sum.Individuals) }</b>
+							<span>Individuals</span>
+						</div>
+						<div class="stat">
+							<b>{ count(sum.Media) }</b>
+							<span>Photographs</span>
+						</div>
+						<div class="stat">
+							<b>{ count(sum.Recorders) }</b>
+							<span>Observers</span>
+						</div>
+					</div>
+					<div class="stats__panel">
+						<h3>Sightings per year</h3>
+						@components.Sparkline(byYear, sum)
+						<h3>Most-seen species</h3>
+						@components.Bars(topSpecies(sightings, 5))
+						<h3>Most-seen countries</h3>
+						@components.Bars(topCountries(sightings, 5))
+					</div>
+				</div>
+			</section>
+		}
 		<section class="section container" id="sightings">
 			<div class="section__head reveal">
 				<h2>Field log</h2>
@@ -45,9 +91,18 @@ templ Home(sightings []sighting.Sighting) {
 			if len(sightings) == 0 {
 				<p>No sightings have been ingested yet.</p>
 			} else {
+				@components.Filter(components.FilterProps{
+					Target: "sightings-list",
+					Search: true,
+					Groups: []components.FilterGroup{
+						{Key: "animal", Label: "Animal", Options: components.FilterOptions(sightings, 10, components.Animal)},
+						{Key: "country", Label: "Country", Options: components.FilterOptions(sightings, 10, components.Country)},
+						{Key: "decade", Label: "Decade", Options: components.FilterOptions(sightings, 8, components.Decade)},
+					},
+				})
 				<ul class="wall" id="sightings-list">
 					for _, s := range sightings {
-						<li>
+						<li { components.FilterAttrs(s)... }>
 							@components.SightingCard(s)
 						</li>
 					}

@@ -3,7 +3,23 @@ package pages
 import (
 	"strconv"
 	"strings"
+
+	"workshop/internal/domain/sighting"
 )
+
+// topSpecies ranks the species with the most sightings, by scientific name.
+func topSpecies(sightings []sighting.Sighting, n int) []sighting.Tally {
+	return sighting.Top(sighting.CountBy(sightings, func(s sighting.Sighting) string {
+		return s.Species.ScientificName
+	}), n)
+}
+
+// topCountries ranks the countries with the most sightings.
+func topCountries(sightings []sighting.Sighting, n int) []sighting.Tally {
+	return sighting.Top(sighting.CountBy(sightings, func(s sighting.Sighting) string {
+		return s.Location.Country
+	}), n)
+}
 
 // count formats a headline figure with thousands separators.
 func count(n int) string {
