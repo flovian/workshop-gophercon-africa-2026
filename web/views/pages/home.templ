@@ -89,6 +89,24 @@ templ Home(sightings []sighting.Sighting) {
 				</div>
 			</section>
 		}
+		if facts := fieldNotes(sightings); len(facts) > 0 {
+			<section class="section container" id="notes">
+				<div class="section__head reveal">
+					<h2>Field notes</h2>
+					<p>Extremes the records can prove: the coldest hour, the oldest note, the loneliest species.</p>
+				</div>
+				<hr class="rule reveal"/>
+				<ul class="facts reveal">
+					for _, f := range facts {
+						<li class="fact">
+							<span class="fact__label">{ f.Label }</span>
+							<b class="fact__value">{ f.Value }</b>
+							<span class="fact__detail">{ f.Detail }</span>
+						</li>
+					}
+				</ul>
+			</section>
+		}
 		<section class="section container" id="sightings">
 			<div class="section__head reveal">
 				<h2>Field log</h2>
