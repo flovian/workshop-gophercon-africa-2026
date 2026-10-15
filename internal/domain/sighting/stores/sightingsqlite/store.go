@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"log/slog"
 	"uuid"
 	"workshop/internal/domain/sighting"
@@ -81,13 +80,13 @@ func (s Store) List(ctx context.Context, filter sighting.ListFilter) ([]sighting
 
 	result := make([]sighting.Sighting, len(rows))
 	for i, row := range rows {
-		msg := fmt.Sprintf("store: listing row %d of %v", i+1, rows)
-		slog.DebugContext(ctx, msg)
 		result[i], err = transform(row)
 		if err != nil {
 			return nil, err
 		}
 	}
+
+	slog.DebugContext(ctx, "store: listed sightings", slog.Int("count", len(result)))
 
 	return result, nil
 }
