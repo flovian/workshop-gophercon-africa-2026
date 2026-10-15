@@ -109,5 +109,20 @@ templ Home(sightings []sighting.Sighting) {
 				</ul>
 			}
 		</section>
+		<section class="section container" id="map">
+			<div class="section__head reveal">
+				<h2>Where they were</h2>
+				<p>Every record with a position, grouped where they cluster. Each one jumps back to its tile.</p>
+			</div>
+			<hr class="rule reveal"/>
+			<div class="map-wrap reveal">
+				@components.Map(components.MapProps{
+					Points:  components.MapPoints(sightings),
+					Cluster: true,
+					Class:   "map--dark",
+					Label:   "Map of where the sightings were recorded",
+				})
+			</div>
+		</section>
 	}
 }

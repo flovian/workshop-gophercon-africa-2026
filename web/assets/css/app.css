@@ -606,6 +606,14 @@ main {
 	font-size: 0.9rem;
 }
 
+.stats__panel h3:not(:first-child) {
+	margin-top: 1.75rem;
+}
+
+.sparkline {
+	margin-bottom: 0.5rem;
+}
+
 /* Map ------------------------------------------------------------------- */
 
 .map-wrap {

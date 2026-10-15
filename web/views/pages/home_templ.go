@@ -276,7 +276,20 @@ func Home(sightings []sighting.Sighting) templ.Component {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, "</section>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, "</section><section class=\"section container\" id=\"map\"><div class=\"section__head reveal\"><h2>Where they were</h2><p>Every record with a position, grouped where they cluster. Each one jumps back to its tile.</p></div><hr class=\"rule reveal\"><div class=\"map-wrap reveal\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = components.Map(components.MapProps{
+				Points:  components.MapPoints(sightings),
+				Cluster: true,
+				Class:   "map--dark",
+				Label:   "Map of where the sightings were recorded",
+			}).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "</div></section>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
