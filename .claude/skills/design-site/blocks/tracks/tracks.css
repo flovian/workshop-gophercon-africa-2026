@@ -1,0 +1,81 @@
+/* block: tracks — copy to web/assets/css/tracks.css. See tracks.md. */
+
+.tracks {
+	display: grid;
+	gap: 20px;
+}
+
+.tracks__picker {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.tracks__pick {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	padding: 10px 16px;
+	border: 1px solid var(--line);
+	border-radius: 999px;
+	background: var(--ink-2);
+	color: var(--sand);
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+	transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.tracks__pick:hover {
+	border-color: color-mix(in srgb, var(--gold) 55%, var(--line));
+}
+
+.tracks__pick small {
+	color: var(--sand-dim);
+	font-size: 0.7rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.tracks__pick[aria-pressed='true'] {
+	border-color: var(--gold);
+	background: color-mix(in srgb, var(--gold) 16%, var(--ink-2));
+	color: var(--gold-soft);
+}
+
+.tracks__pick[aria-pressed='true'] small {
+	color: var(--gold-soft);
+}
+
+.tracks__view {
+	display: grid;
+	gap: 12px;
+}
+
+.tracks__map {
+	position: relative;
+	width: 100%;
+	height: min(62vh, 520px);
+	overflow: hidden;
+	border: 1px solid var(--line);
+	border-radius: var(--radius);
+	background: var(--ink-3);
+	isolation: isolate;
+}
+
+.tracks__map:focus-visible {
+	outline: 2px solid var(--gold);
+	outline-offset: 2px;
+}
+
+.tracks__map .leaflet-popup-content-wrapper {
+	border-radius: 4px;
+}
+
+.tracks__caption {
+	margin: 0;
+	min-height: 1.2em;
+	color: var(--sand);
+	font-size: 0.95rem;
+	text-align: center;
+}

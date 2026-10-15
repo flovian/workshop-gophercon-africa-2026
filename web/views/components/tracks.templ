@@ -1,0 +1,38 @@
+package components
+
+import (
+	"strconv"
+
+	"workshop/internal/domain/sighting"
+)
+
+templ Tracks(sightings []sighting.Sighting) {
+	{{ tracks := AnimalTracks(sightings) }}
+	if len(tracks) > 0 {
+		<div class="tracks">
+			<div class="tracks__picker" role="group" aria-label="Choose an animal to track">
+				for i, t := range tracks {
+					<button
+						type="button"
+						class="tracks__pick"
+						data-track={ strconv.Itoa(i) }
+						aria-pressed={ strconv.FormatBool(i == 0) }
+					>
+						{ t.Animal }
+						<small>{ strconv.Itoa(len(t.Points)) } sightings</small>
+					</button>
+				}
+			</div>
+			<div class="tracks__view">
+				<div
+					class="tracks__map map--dark"
+					data-track-map
+					aria-label="Map tracing the chosen animal's sightings in order"
+				>
+				</div>
+				<p class="tracks__caption" data-track-caption aria-live="polite"></p>
+			</div>
+		</div>
+		@templ.JSONScript("track-data", tracks)
+	}
+}

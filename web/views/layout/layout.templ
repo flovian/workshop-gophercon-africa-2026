@@ -42,6 +42,7 @@ templ Base(props BaseProps) {
 			<link rel="stylesheet" href="/assets/css/charts.css"/>
 			<link rel="stylesheet" href="/assets/css/filter.css"/>
 			<link rel="stylesheet" href="/assets/css/map.css"/>
+			<link rel="stylesheet" href="/assets/css/tracks.css"/>
 			<link rel="stylesheet" href="/assets/css/reveal.css"/>
 			<link rel="stylesheet" href="/assets/css/threejs.css"/>
 		</head>
@@ -67,6 +68,7 @@ templ Base(props BaseProps) {
 					<a href="/#map" if props.Current == "map" {
 						aria-current="page"
 					}>Map</a>
+					<a href="/#tracks">Tracks</a>
 				</nav>
 			</header>
 			<main>
@@ -82,6 +84,7 @@ templ Base(props BaseProps) {
 			<script src="/assets/js/reveal.js" defer></script>
 			<script src="/assets/js/filter.js" defer></script>
 			<script src="/assets/js/map.js" defer></script>
+			<script src="/assets/js/tracks.js" defer></script>
 		</body>
 	</html>
 }
